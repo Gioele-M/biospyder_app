@@ -5,18 +5,19 @@ import base64
 from assets import ids, functions
 
 # Components
-app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
 
 
 sequences = None
 
 # app title
 app.title = 'BioSpyder App'
-# Layout
-#app.layout = create_layout(app)
 
+# Layout
 all_nations= ['A', 'B', 'C']
 app.layout = html.Div([
+    #Header
+    html.H1('BioSpyder Sequence Analysis Tool'),
     #Div for uploading file
     dcc.Upload(
         id=ids.UPLOAD_FASTA_COMPONENT,
@@ -78,7 +79,8 @@ def update_output(list_of_contents):
     Input(ids.DROPDOWN_COMPONENT, 'value')
 )
 def update_dropdown(value):
-    if value:
+    print(type(str(value)), str(value))
+    if str(value) != 'None':
         #First for lenght, second for sequence, third bar graph
         length_text =f'You have selected {value}, of lenght {len(sequences[value])}'
         #Sequence
@@ -89,7 +91,7 @@ def update_dropdown(value):
         fig = px.bar(df, x='Base', y='Count')
         bar_graph = html.Div(dcc.Graph(figure=fig, id=ids.BAR_CHART))
         return length_text, gc_content_text, bar_graph
-
+    
 
 
 #Run app
