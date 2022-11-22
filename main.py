@@ -2,7 +2,7 @@ from dash import Dash, dcc, Output, Input, html, State
 import dash_bootstrap_components as dbc
 import plotly.express as px
 import base64
-import ids, functions
+from assets import ids, functions
 
 # Components
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -53,33 +53,24 @@ app.layout = html.Div([
 
 
 
-
+#Callback for upload
 @app.callback(
         Output(ids.OUTPUT_DATA, 'children'),
-        Input(ids.UPLOAD_FASTA_COMPONENT, 'contents'),
-        State(ids.UPLOAD_FASTA_COMPONENT, 'filename'),
-        State(ids.UPLOAD_FASTA_COMPONENT, 'last_modified')
+        Input(ids.UPLOAD_FASTA_COMPONENT, 'contents')
     )
-def update_output(list_of_contents, list_of_names, list_of_dates):
-    # print('list_of_contents ', type(list_of_contents), list_of_contents)
-    # print('list_of_names ', type(list_of_names), list_of_names)
-    # print('list_of_dates ', type(list_of_dates), list_of_dates)
-
+def update_output(list_of_contents):
     if list_of_contents:
         content_type, content_string = list_of_contents.split(',')
         text = base64.b64decode(content_string)
         
-        print('text ,' , text)
         d = functions.read_fasta(text.decode('utf-8'))
-        print(d)
-        # return dictionary.keys()[0]
-        # return html.Div(str(d))
-        #return html.Div('This is the upload file')
         global sequences
         sequences = d
 
         return dcc.Dropdown(options=[{'label':m, 'value':m} for m in d], id=ids.DROPDOWN_COMPONENT)
 
+
+#Callback for dropdown
 @app.callback(
     Output(ids.DROPDOWN_OUTPUT, 'children'),
     Output(ids.GC_DIV, 'children'),
@@ -88,7 +79,6 @@ def update_output(list_of_contents, list_of_names, list_of_dates):
 )
 def update_dropdown(value):
     if value:
-        print('!!!!!!!!!!!!', sequences)
         #First for lenght, second for sequence, third bar graph
         length_text =f'You have selected {value}, of lenght {len(sequences[value])}'
         #Sequence
