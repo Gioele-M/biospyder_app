@@ -67,8 +67,12 @@ def update_output(list_of_contents):
         d = functions.read_fasta(text.decode('utf-8'))
         global sequences
         sequences = d
-
-        return dcc.Dropdown(options=[{'label':m, 'value':m} for m in d], id=ids.DROPDOWN_COMPONENT)
+        print(d.keys())
+        return dcc.Dropdown(
+            options=[{'label':m, 'value':m} for m in d], 
+            id=ids.DROPDOWN_COMPONENT,
+            value=list(d.keys())[0]
+            )
 
 
 #Callback for dropdown
