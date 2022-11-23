@@ -11,3 +11,4 @@ GC_DIV = 'GCDiv'
 BAR_CHART = 'barChart'
 
 BAR_CHART_DIV = 'barChartDiv'
+SEQUENCE_VIEWER = 'sequenceViewer'

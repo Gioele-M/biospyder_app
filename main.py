@@ -4,7 +4,6 @@ import plotly.express as px
 import base64
 from assets import ids, functions
 import dash_bio as dashbio
-from dash_bio.utils import protein_reader
 
 # Components
 app = Dash(__name__, external_stylesheets=[dbc.themes.LUX], suppress_callback_exceptions=True)
@@ -15,7 +14,7 @@ sequences = None
 # app title
 app.title = 'BioSpyder App'
 
-description = 'This is a gene analysis tool for preliminary sequence analysis. Upload a .fasta or .csv file and get descriptive metrics about the genes'
+description = 'This is a gene analysis tool for preliminary sequence analysis. \nUpload a .fasta or .csv file and get descriptive metrics about the genes'
 
 div_style = {
     'background': 'white',
@@ -130,7 +129,7 @@ def update_output(list_of_contents, filename):
         return dcc.Dropdown(
             options=[{'label':m, 'value':m} for m in d], 
             id=ids.DROPDOWN_COMPONENT,
-            value=list(d.keys())[0],
+            # value=list(d.keys())[0],!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             ), f'{len(d)} sequences loaded'
 
 
@@ -139,22 +138,33 @@ def update_output(list_of_contents, filename):
     Output(ids.DROPDOWN_OUTPUT, 'children'),
     Output(ids.GC_DIV, 'children'),
     Output(ids.BAR_CHART_DIV, 'children'),
-    Input(ids.DROPDOWN_COMPONENT, 'value')
+    Input(ids.DROPDOWN_COMPONENT, 'value'),
+    prevent_initial_call=True
 )
 def update_dropdown(value):
     print(type(str(value)), str(value))
     if str(value) != 'None':
         #First for lenght, second for sequence, third bar graph
-        length_text =f'You have selected {value}, of lenght {len(sequences[value])}bp'
+        length_text =f'You have selected {value}, of length {len(sequences[value])}bp'
         #Sequence
         gc_content, n, pos = functions.gc_subsequence(sequences[value])
-        gc_content_text = f'The sequence with the highest content of CG is: {gc_content}, with a total content of {n}0%'
+        gc_content_text = f'The 10bp sequence with the highest content of CG is: {gc_content}, with a total content of {n}0%'
+        #Sequence visualiser for GC content
+        graph = dashbio.SequenceViewer(
+            id=ids.SEQUENCE_VIEWER,
+            sequence=sequences[value],
+            selection=[pos, pos+10, 'green'],
+            badge=False,
+            search=False
+        )  
+
         #Bar Graph
         df = functions.get_nucleotides(sequences[value])
         fig = px.bar(df, x='Base', y='Percent', text='Count')
         bar_graph = html.Div(dcc.Graph(figure=fig, id=ids.BAR_CHART))
-        return length_text, gc_content_text, bar_graph
-    
+        return length_text, [gc_content_text, graph], bar_graph
+    else:
+        return None, None, None
 
 #Callback for change style
 @app.callback(
@@ -163,8 +173,10 @@ def update_dropdown(value):
     Input(ids.DROPDOWN_COMPONENT, 'value')
 )
 def update_style(value):
-    return div_style, div_style
-
+    if str(value) != 'None':
+        return div_style, div_style
+    else:
+        return None, None
 
 #Run app
 if __name__ == '__main__':
