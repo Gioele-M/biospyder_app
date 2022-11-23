@@ -1,0 +1,47 @@
+from functions import get_lenght, gc_subsequence, read_fasta, get_nucleotides
+import pytest
+
+# Test get length
+@pytest.mark.parametrize('seq', ['ATATATGGGA'])
+def test_get_lenght(seq):
+    assert get_lenght(seq) == 10
+
+
+# Test get GC subsequence
+@pytest.mark.parametrize('seq', ['AAAAGAGACCGCAGAAAAAGGAGGAAATTTTTAGGAGCC'])
+def test_gc_sequence(seq):
+    subseq, content = gc_subsequence(seq)
+    assert subseq == 'GAGACCGCAG'
+    assert content == 7
+
+
+fasta_text = '''
+>Sequence_1
+AGCTGCATCGATCGACGATCGATGACTAGCTGATCGATCGATCGATCGATCGAGCTACGATCGATGTACGATCGATCGATCGATCGACTGACTAGCTAGCTAGCATCGATCGATCGATCGATCGATCGATCGATCGATCGATCGATCGATCGACGATCGATCGATCGATCGATCGATCGACTAGC
+>Sequence_2
+TTGTCAGTCGACTGCAATCACGACTCCGATCGATCGATCGATCGATGCTAGCTGATCGATCGATCGATCACGTACGACTAGACTAGCTACGACTAGT
+ATACGATCGACATATCGTACGATCGCATGCTAGCTACGTAGCATCGTACCGATGCTAGCTAGCTACGTCAGT
+>Sequence_3
+AATCGCAGTAGCTGATCACATCGACTGATCTAGCATCGTAGCTACTACGATCTGATCGATCGATCGTGATCGATCGATCG
+>Sequence_4
+TACGATCATTTCGGCTATTCCGCTATACGTACGATCGCCCCCCCCCCCATCGACTGACTACGACTAGCTGAC
+ACAGCTACTACGATTATACGATTCGTAGCTACGTACGATCGATCGATCGATGCTAGCTAGAC
+TACTAGCTACGATCGATCGATCGATCGATCGATCAGCTACGATCGATCGATCGATCGATCAG
+'''
+# Test read fasta file
+@pytest.mark.parametrize('text', [fasta_text])
+def test_read_fasta(text):
+    sequences = read_fasta(text)
+    assert len(sequences) == 4
+    assert 'Sequence_1' in sequences.keys()
+
+
+# Test get nucleotides DF
+testing_seq = 'TACGATCATTTCGGCTATTCCGCTATACGTACGATCGCCCCCCCCCCCATCGACTGACTACGACTAGCTGACACAGCTACTACGATTATACGATTCGTAGCTACGTACGATCGATCGATCGATGCTAGCTAGACTACTAGCTACGATCGATCGATCGATCGATCGATCAGCTACGATCGATCGATCGATCGATCAG'
+
+@pytest.mark.parametrize('seq', [testing_seq])
+def test_get_nucleotides(seq):
+    df = get_nucleotides(seq)
+    assert len(df) == 4
+    assert 'DataFrame' in str(type(df))
+
