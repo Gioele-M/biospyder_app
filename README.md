@@ -14,7 +14,7 @@ Once the directory is been downloaded or cloned locally, you will need to create
 `conda env create -f environment.yml`
 
 You can check for the successful creation of the environment using:
-`conda BlastPTree_env list`
+`conda spyder_app list`
 
 Once the environment is created, using the terminal:
 - Move into the directory
@@ -28,7 +28,7 @@ The local host [server](http://localhost:8000/) will run on port 8000
 
 
 ### Usage
-_Once the server is running, or the heroku server has responded, you will find yourself in the landing page, where you can upload a .fasta or .csv file containing genomic sequences._
+_Once the server is running, or the heroku server has responded, you will find yourself on the landing page, where you can upload a .fasta or .csv file containing genomic sequences._
 ![landing page](/assets/landing.png)
 
 
