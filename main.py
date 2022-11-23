@@ -14,7 +14,7 @@ sequences = None
 # app title
 app.title = 'BioSpyder App'
 
-description = 'This is a gene analysis tool for preliminary sequence analysis. \nUpload a .fasta or .csv file and get descriptive metrics about the genes'
+description = html.P(['This is a gene analysis tool for preliminary sequence analysis.', html.Br(), ' Upload a .fasta or .csv file and get descriptive metrics about the genes'])
 
 div_style = {
     'background': 'white',
@@ -31,12 +31,25 @@ div_style = {
 # Layout
 all_nations= ['A', 'B', 'C']
 app.layout = html.Div([
+    #logo
+    html.Img(src=r'assets/logo.png', alt='logo', style={'maxWidth': '16rem', 'padding':'1rem'}),
+
     #Header
     html.H1('BioSpyder Sequence Analysis Tool',
         style={
             'textAlign': 'center',
             'paddingTop': '30px',
-            'fontSize': '2.5rem'
+            'fontSize': '2.5rem',
+            'marginTop': '-1.5rem'
+        }),
+
+    html.Img(src=r'assets/dna.png', alt='dna-image', style={
+        'maxWidth': '12rem', 
+        'padding':'0.5rem',
+        'display': 'block',
+        'margin-left': 'auto',
+        'margin-right': 'auto',
+        'marginTop': '-3rem'
         }),
     #Div for uploading file
     dcc.Upload(
