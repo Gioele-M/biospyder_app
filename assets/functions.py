@@ -5,6 +5,7 @@ def get_lenght(seq):
     return len(seq)
 
 
+#Get 10bp subsequence with highest GC content
 def gc_subsequence(seq):
     highest_subseq = ''
     highest_content = 0
@@ -21,7 +22,7 @@ def gc_subsequence(seq):
     return highest_subseq, highest_content, pos
 
 
-
+#Read fasta file
 def read_fasta(text):
     sequences = {}
     current = ''
@@ -36,6 +37,7 @@ def read_fasta(text):
     return sequences
 
 
+#Read csv file
 def read_csv(text):
     sequences = {}
     lines = text.strip().splitlines()[1:]
@@ -45,7 +47,7 @@ def read_csv(text):
     return sequences
         
 
-
+# Get DF with nucleotide count
 def get_nucleotides(seq):
     a = seq.count('A')
     t = seq.count('T')
@@ -59,12 +61,11 @@ def get_nucleotides(seq):
 
 
 
-
+# BLAST search function
+# This function was not implemented because of the excessive runtime of the qblast function
 def biopython_search(seq):
     result = NCBIWWW.qblast('blastn', 'nt', seq, format_type='Text')
     # readable_result = result.read()
     # blast_record = NCBIXML.parse(readable_result)
     print(result)
 
-if __name__ == '__main__':
-    biopython_search('gctctgtcgcccaggctggagtgcagtggcgcgatctcgactcactgcaa')

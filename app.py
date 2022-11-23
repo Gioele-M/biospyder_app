@@ -8,16 +8,18 @@ import dash_bio as dashbio
 # Components
 app = Dash(__name__, external_stylesheets=[dbc.themes.LUX], suppress_callback_exceptions=True)
 
-#for heroku
+#Variable for heroku
 server = app.server
 
+#Global variable
 sequences = None
 
-# app title
+# App title
 app.title = 'BioSpyder App'
 
 description = html.P(['This is a gene analysis tool for preliminary sequence analysis.', html.Br(), ' Upload a .fasta or .csv file and get descriptive metrics about the genes'])
 
+#Generic div styling
 div_style = {
     'background': 'white',
     'padding': '2rem',
@@ -31,7 +33,6 @@ div_style = {
 }
 
 # Layout
-all_nations= ['A', 'B', 'C']
 app.layout = html.Div([
     #logo
     html.Img(src=r'assets/logo.png', alt='logo', style={'maxWidth': '16rem', 'padding':'1rem'}),
@@ -44,7 +45,7 @@ app.layout = html.Div([
             'fontSize': '2.5rem',
             'marginTop': '-1.5rem'
         }),
-
+    #Sub header image
     html.Img(src=r'assets/dna.png', alt='dna-image', style={
         'maxWidth': '12rem', 
         'padding':'0.5rem',
@@ -79,7 +80,9 @@ app.layout = html.Div([
         multiple=False
     ),
 
+    # General div for results
     html.Div(children=[
+        #Div for number of sequences
         html.Div(description, id=ids.N_SEQUENCES,
         style=div_style),
 
@@ -110,8 +113,6 @@ app.layout = html.Div([
         'marginLeft': 'auto',
         'marginRight': 'auto'
     })
-    #Div for upload result, adds dropdown menu
-
 
 ])
 
@@ -126,7 +127,6 @@ app.layout = html.Div([
     )
 def update_output(list_of_contents, filename):
     if str(list_of_contents) != 'None':
-        print(filename)
         content_type, content_string = list_of_contents.split(',')
         text = base64.b64decode(content_string)
         #Read file based on extension
@@ -138,13 +138,13 @@ def update_output(list_of_contents, filename):
         else:
             return None, 'Please only upload .fasta or .csv files'
 
+        #Set sequences as global
         global sequences
         sequences = d
-        print(d.keys())
+        #Return dropdown
         return dcc.Dropdown(
             options=[{'label':m, 'value':m} for m in d], 
             id=ids.DROPDOWN_COMPONENT,
-            # value=list(d.keys())[0],!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             ), f'{len(d)} sequences loaded'
 
 
@@ -157,10 +157,10 @@ def update_output(list_of_contents, filename):
     prevent_initial_call=True
 )
 def update_dropdown(value):
-    print(type(str(value)), str(value))
     if str(value) != 'None':
         #First for lenght, second for sequence, third bar graph
         length_text =f'You have selected {value}, of length {len(sequences[value])}bp'
+        
         #Sequence
         gc_content, n, pos = functions.gc_subsequence(sequences[value])
         gc_content_text = f'The 10bp sequence with the highest content of CG is: {gc_content}, with a total content of {n}0% (pos {pos+1}-{pos+10})'
@@ -186,7 +186,6 @@ def update_dropdown(value):
 @app.callback(
     Output(ids.DROPDOWN_OUTPUT, 'style'),
     Output(ids.GC_DIV, 'style'),
-    # Input(ids.DROPDOWN_COMPONENT, 'value')
     Input(ids.BAR_CHART_DIV, 'children')
 )
 def update_style(value):
