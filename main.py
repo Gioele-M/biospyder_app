@@ -15,20 +15,39 @@ sequences = None
 # app title
 app.title = 'BioSpyder App'
 
+description = 'This is a gene analysis tool for preliminary sequence analysis. Upload a .fasta file and get descriptive metrics about the genes'
+
+div_style = {
+    'background': 'white',
+    'padding': '2rem',
+    'border': '5px solid gray',
+    'borderRadius': '1rem',
+    'fontSize': '1.5rem',
+    'margin': '0.7rem',
+    'maxWidth': '70%',
+    'marginLeft': 'auto',
+    'marginRight':'auto'
+}
+
 # Layout
 all_nations= ['A', 'B', 'C']
 app.layout = html.Div([
     #Header
     html.H1('BioSpyder Sequence Analysis Tool',
         style={
-            'textAlign': 'center'
+            'textAlign': 'center',
+            'paddingTop': '30px',
+            'fontSize': '2.5rem'
         }),
     #Div for uploading file
     dcc.Upload(
         id=ids.UPLOAD_FASTA_COMPONENT,
         children= html.Div([
             'Drag and Drop or ',
-            html.A('Select Files')
+            html.A('Select Files', style={
+                'textDecoration': 'underline',
+                'color': 'blue'
+            })
         ]),
         style={
             'height': '60px',
@@ -47,23 +66,27 @@ app.layout = html.Div([
     ),
 
     html.Div(children=[
-        html.Div('Upload a fasta file to start', id=ids.N_SEQUENCES),
+        html.Div(description, id=ids.N_SEQUENCES,
+        style=div_style),
 
-        html.Div(id=ids.OUTPUT_DATA),
+        html.Div(id=ids.OUTPUT_DATA),#, style=div_style),
 
         #Div for dropdown menu result
-        html.Div(id=ids.DROPDOWN_OUTPUT),
+        html.Div(id=ids.DROPDOWN_OUTPUT, style={
+            'padding': '1rem',
+            'fontSize': '2rem'
+        }),
         
         #Div for bar chart
         html.Div(id=ids.BAR_CHART_DIV),
         
         #Div for highest GC content
-        html.Div(id=ids.GC_DIV)
+        html.Div(id=ids.GC_DIV)#, style=div_style)
     ],
     style={
         'textAlign': 'center',
         'margin': '10px',
-        'maxWidth': '60%',
+        'maxWidth': '80%',
         'marginLeft': 'auto',
         'marginRight': 'auto'
     })
@@ -118,6 +141,15 @@ def update_dropdown(value):
         bar_graph = html.Div(dcc.Graph(figure=fig, id=ids.BAR_CHART))
         return length_text, gc_content_text, bar_graph
     
+
+#Callback for change style
+@app.callback(
+    Output(ids.DROPDOWN_OUTPUT, 'style'),
+    Output(ids.GC_DIV, 'style'),
+    Input(ids.DROPDOWN_COMPONENT, 'value')
+)
+def update_style(value):
+    return div_style, div_style
 
 
 #Run app

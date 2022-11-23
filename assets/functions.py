@@ -34,6 +34,15 @@ def read_fasta(text):
     return sequences
 
 
+def read_csv(text):
+    sequences = {}
+    lines = text.strip().splitlines()[1:]
+    for line in lines:
+        info = line.split(',')
+        sequences[info[0]] = info[1]
+    return sequences
+        
+
 
 def get_nucleotides(seq):
     a = seq.count('A')

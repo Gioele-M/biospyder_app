@@ -1,4 +1,4 @@
-from functions import get_lenght, gc_subsequence, read_fasta, get_nucleotides
+from functions import get_lenght, gc_subsequence, read_fasta, get_nucleotides, read_csv
 import pytest
 
 # Test get length
@@ -44,4 +44,20 @@ def test_get_nucleotides(seq):
     df = get_nucleotides(seq)
     assert len(df) == 4
     assert 'DataFrame' in str(type(df))
+
+
+csv_text = '''
+Sequence_name,Sequence
+Sequence_1,AGCTGCATCGATCGACGATCGATGACTAGCTGATCGATCGATCGATCGATCGAGCTACGATCGATGTACGATCGATCGATCGATCGACTGACTAGCTAGCTAGCATCGATCGATCGATCGATCGATCGATCGATCGATCGATCGATCGATCGACGATCGATCGATCGATCGATCGATCGACTAGC
+Sequence_2,TTGTCAGTCGACTGCAATCACGACTCCGATCGATCGATCGATCGATGCTAGCTGATCGATCGATCGATCACGTACGACTAGACTAGCTACGACTAGTATACGATCGACATATCGTACGATCGCATGCTAGCTACGTAGCATCGTACCGATGCTAGCTAGCTACGTCAGT
+Sequence_3,AATCGCAGTAGCTGATCACATCGACTGATCTAGCATCGTAGCTACTACGATCTGATCGATCGATCGTGATCGATCGATCG
+Sequence_4,TACGATCATTTCGGCTATTCCGCTATACGTACGATCGCCCCCCCCCCCATCGACTGACTACGACTAGCTGAC
+'''
+print(read_csv(csv_text))
+@pytest.mark.parametrize('text', [csv_text])
+def test_read_csv(text):
+    dictionary = read_csv(text)
+    assert len(dictionary) == 4
+    assert 'AGCTGCATCG' in dictionary['Sequence_1']
+
 
