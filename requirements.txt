@@ -4,3 +4,4 @@ dash-bootstrap-components
 dash-bio
 pytest
 biopython
+gunicorn
