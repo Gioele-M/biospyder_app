@@ -41,6 +41,7 @@ _After uploading a file in the correct format, you will be prompted with the num
 
 
 
+
 _Once one of the sequences is chosen, the app will present you with metrics about the selected sequence, including length, base distribution and 10bp sequence with highest GC content._
 ![results page](/assets/results.png)
 
