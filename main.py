@@ -161,7 +161,7 @@ def update_dropdown(value):
         length_text =f'You have selected {value}, of length {len(sequences[value])}bp'
         #Sequence
         gc_content, n, pos = functions.gc_subsequence(sequences[value])
-        gc_content_text = f'The 10bp sequence with the highest content of CG is: {gc_content}, with a total content of {n}0%'
+        gc_content_text = f'The 10bp sequence with the highest content of CG is: {gc_content}, with a total content of {n}0% (pos {pos+1}-{pos+10})'
         #Sequence visualiser for GC content
         graph = dashbio.SequenceViewer(
             id=ids.SEQUENCE_VIEWER,
@@ -174,6 +174,7 @@ def update_dropdown(value):
         #Bar Graph
         df = functions.get_nucleotides(sequences[value])
         fig = px.bar(df, x='Base', y='Percent', text='Count')
+        fig.update_traces(marker_color='rgb(165,211,66)', marker_line_color='rgb(65,144,69)', marker_line_width=1.5, opacity=0.6, textfont_size=20)
         bar_graph = html.Div(dcc.Graph(figure=fig, id=ids.BAR_CHART))
         return length_text, [gc_content_text, graph], bar_graph
     else:

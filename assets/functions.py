@@ -53,7 +53,7 @@ def get_nucleotides(seq):
     g = seq.count('G')    
     total = a+t+c+g
 
-    data = {0:['A', a, (a/total)*100], 1:['T', t, (t/total)*100], 2:['C',c, (c/total)*100], 3:['G', g, (g/total)*100]}
+    data = {0:['A', f'{a}bp', (a/total)*100], 1:['T', f'{t}bp', (t/total)*100], 2:['C',f'{c}bp', (c/total)*100], 3:['G', f'{g}bp', (g/total)*100]}
     df = pd.DataFrame.from_dict(data, orient='index', columns=['Base', 'Count', 'Percent'])
     return df
 
@@ -61,9 +61,12 @@ def get_nucleotides(seq):
 
 
 def biopython_search(seq):
+    print('searching')
     result = NCBIWWW.qblast('blastn', 'nt', seq, format_type='Text')
-    readable_result = result.read()
+    print('got it')
+    # readable_result = result.read()
     # blast_record = NCBIXML.parse(readable_result)
-    print(readable_result)
+    print(result)
 
-#biopython_search('AATCGCAGTAGCTGATCACATCGACTGATCTAGCATCGTAGCTACTACGATCTGATCGATCGATCGTGATCGATCGATCG')
+if __name__ == '__main__':
+    biopython_search('gctctgtcgcccaggctggagtgcagtggcgcgatctcgactcactgcaa')
