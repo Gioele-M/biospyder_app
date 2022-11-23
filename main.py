@@ -183,7 +183,8 @@ def update_dropdown(value):
 @app.callback(
     Output(ids.DROPDOWN_OUTPUT, 'style'),
     Output(ids.GC_DIV, 'style'),
-    Input(ids.DROPDOWN_COMPONENT, 'value')
+    # Input(ids.DROPDOWN_COMPONENT, 'value')
+    Input(ids.BAR_CHART_DIV, 'children')
 )
 def update_style(value):
     if str(value) != 'None':
