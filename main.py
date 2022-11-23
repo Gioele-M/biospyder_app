@@ -15,7 +15,7 @@ sequences = None
 # app title
 app.title = 'BioSpyder App'
 
-description = 'This is a gene analysis tool for preliminary sequence analysis. Upload a .fasta file and get descriptive metrics about the genes'
+description = 'This is a gene analysis tool for preliminary sequence analysis. Upload a .fasta or .csv file and get descriptive metrics about the genes'
 
 div_style = {
     'background': 'white',
@@ -69,7 +69,7 @@ app.layout = html.Div([
         html.Div(description, id=ids.N_SEQUENCES,
         style=div_style),
 
-        html.Div(id=ids.OUTPUT_DATA),#, style=div_style),
+        html.Div(id=ids.OUTPUT_DATA),
 
         #Div for dropdown menu result
         html.Div(id=ids.DROPDOWN_OUTPUT, style={
@@ -81,7 +81,7 @@ app.layout = html.Div([
         html.Div(id=ids.BAR_CHART_DIV),
         
         #Div for highest GC content
-        html.Div(id=ids.GC_DIV)#, style=div_style)
+        html.Div(id=ids.GC_DIV)
     ],
     style={
         'textAlign': 'center',
@@ -102,14 +102,23 @@ app.layout = html.Div([
         Output(ids.OUTPUT_DATA, 'children'),
         Output(ids.N_SEQUENCES, 'children'),
         Input(ids.UPLOAD_FASTA_COMPONENT, 'contents'),
+        Input(ids.UPLOAD_FASTA_COMPONENT, 'filename'),
         prevent_initial_call=True
     )
-def update_output(list_of_contents):
+def update_output(list_of_contents, filename):
     if str(list_of_contents) != 'None':
+        print(filename)
         content_type, content_string = list_of_contents.split(',')
         text = base64.b64decode(content_string)
-        
-        d = functions.read_fasta(text.decode('utf-8'))
+        #Read file based on extension
+        if filename.split('.')[1] == 'fasta':
+            d = functions.read_fasta(text.decode('utf-8'))
+        elif filename.split('.')[1]=='csv':
+            d = functions.read_csv(text.decode('utf-8'))
+        #If the extension was wrong and the file was not read
+        else:
+            return None, 'Please only upload .fasta or .csv files'
+
         global sequences
         sequences = d
         print(d.keys())
