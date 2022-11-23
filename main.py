@@ -78,10 +78,11 @@ app.layout = html.Div([
 @app.callback(
         Output(ids.OUTPUT_DATA, 'children'),
         Output(ids.N_SEQUENCES, 'children'),
-        Input(ids.UPLOAD_FASTA_COMPONENT, 'contents')
+        Input(ids.UPLOAD_FASTA_COMPONENT, 'contents'),
+        prevent_initial_call=True
     )
 def update_output(list_of_contents):
-    if list_of_contents:
+    if str(list_of_contents) != 'None':
         content_type, content_string = list_of_contents.split(',')
         text = base64.b64decode(content_string)
         
