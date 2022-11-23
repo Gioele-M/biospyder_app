@@ -3,9 +3,11 @@ import dash_bootstrap_components as dbc
 import plotly.express as px
 import base64
 from assets import ids, functions
+import dash_bio as dashbio
+from dash_bio.utils import protein_reader
 
 # Components
-app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
+app = Dash(__name__, external_stylesheets=[dbc.themes.LUX], suppress_callback_exceptions=True)
 
 
 sequences = None
@@ -17,7 +19,10 @@ app.title = 'BioSpyder App'
 all_nations= ['A', 'B', 'C']
 app.layout = html.Div([
     #Header
-    html.H1('BioSpyder Sequence Analysis Tool'),
+    html.H1('BioSpyder Sequence Analysis Tool',
+        style={
+            'textAlign': 'center'
+        }),
     #Div for uploading file
     dcc.Upload(
         id=ids.UPLOAD_FASTA_COMPONENT,
@@ -32,23 +37,35 @@ app.layout = html.Div([
             'borderStyle': 'dashed',
             'borderRadius': '5px',
             'textAlign': 'center',
-            'margin': '10px'
+            'margin': '10px',
+            'maxWidth': '80%',
+            'marginLeft': 'auto',
+            'marginRight': 'auto'
         },
         # Do not allow multiple files for now
         multiple=False
     ),
 
+    html.Div(children=[
+        html.Div(id=ids.OUTPUT_DATA),
+
+        #Div for dropdown menu result
+        html.Div(id=ids.DROPDOWN_OUTPUT),
+
+        #Div for highest GC content
+        html.Div(id=ids.GC_DIV),
+
+        #Div for bar chart
+        html.Div(id=ids.BAR_CHART_DIV)
+    ],
+    style={
+        'margin': '10px',
+        'maxWidth': '60%',
+        'marginLeft': 'auto',
+        'marginRight': 'auto'
+    })
     #Div for upload result, adds dropdown menu
-    html.Div(id=ids.OUTPUT_DATA),
 
-    #Div for dropdown menu result
-    html.Div(id=ids.DROPDOWN_OUTPUT),
-
-    #Div for highest GC content
-    html.Div(id=ids.GC_DIV),
-
-    #Div for bar chart
-    html.Div(id=ids.BAR_CHART_DIV)
 
 ])
 
