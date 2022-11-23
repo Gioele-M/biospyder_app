@@ -8,6 +8,8 @@ import dash_bio as dashbio
 # Components
 app = Dash(__name__, external_stylesheets=[dbc.themes.LUX], suppress_callback_exceptions=True)
 
+#for heroku
+server = app.server
 
 sequences = None
 
