@@ -8,15 +8,17 @@ def get_lenght(seq):
 def gc_subsequence(seq):
     highest_subseq = ''
     highest_content = 0
+    pos = 0
     for x in range(len(seq)-9):
         subseq = seq[x:x+10]
         gc_content = subseq.count('G') + subseq.count('C')
         if gc_content > highest_content:
             highest_content = gc_content
             highest_subseq = subseq
+            pos = x
     if highest_content == 0:
-        return 'This sequence has no G or C', 0
-    return highest_subseq, highest_content
+        return 'This sequence has no G or C', 0, 0
+    return highest_subseq, highest_content, pos
 
 
 

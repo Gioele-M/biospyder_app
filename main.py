@@ -69,7 +69,13 @@ app.layout = html.Div([
         html.Div(description, id=ids.N_SEQUENCES,
         style=div_style),
 
-        html.Div(id=ids.OUTPUT_DATA),
+        html.Div(id=ids.OUTPUT_DATA, 
+            style={
+                'maxWidth': '75%',
+                'marginLeft': 'auto',
+                'marginRight': 'auto',
+                'padding': '1rem'
+                }),
 
         #Div for dropdown menu result
         html.Div(id=ids.DROPDOWN_OUTPUT, style={
@@ -94,7 +100,6 @@ app.layout = html.Div([
 
 
 ])
-
 
 
 #Callback for upload
@@ -125,7 +130,7 @@ def update_output(list_of_contents, filename):
         return dcc.Dropdown(
             options=[{'label':m, 'value':m} for m in d], 
             id=ids.DROPDOWN_COMPONENT,
-            value=list(d.keys())[0]
+            value=list(d.keys())[0],
             ), f'{len(d)} sequences loaded'
 
 
@@ -142,7 +147,7 @@ def update_dropdown(value):
         #First for lenght, second for sequence, third bar graph
         length_text =f'You have selected {value}, of lenght {len(sequences[value])}bp'
         #Sequence
-        gc_content, n = functions.gc_subsequence(sequences[value])
+        gc_content, n, pos = functions.gc_subsequence(sequences[value])
         gc_content_text = f'The sequence with the highest content of CG is: {gc_content}, with a total content of {n}0%'
         #Bar Graph
         df = functions.get_nucleotides(sequences[value])
