@@ -61,9 +61,7 @@ def get_nucleotides(seq):
 
 
 def biopython_search(seq):
-    print('searching')
     result = NCBIWWW.qblast('blastn', 'nt', seq, format_type='Text')
-    print('got it')
     # readable_result = result.read()
     # blast_record = NCBIXML.parse(readable_result)
     print(result)

@@ -1,0 +1,11 @@
+name: spyder_app
+channels:
+  - defaults
+dependencies:
+  - pandas
+  - dash
+  - dash-bootstrap-components
+  - dash-bio
+  - pytest
+  - biopython
+
