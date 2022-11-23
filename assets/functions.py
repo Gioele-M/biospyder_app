@@ -5,9 +5,6 @@ def get_lenght(seq):
     return len(seq)
 
 
-def barplot():
-    pass
-
 def gc_subsequence(seq):
     highest_subseq = ''
     highest_content = 0
@@ -20,10 +17,6 @@ def gc_subsequence(seq):
     if highest_content == 0:
         return 'This sequence has no G or C', 0
     return highest_subseq, highest_content
-
-
-# print(gc_subsequence('AAAAGAGACCGCAGAAAAAGGAGGAAATTTTTAGGAGCC')) #7 'GAGACCGCAG'
-
 
 
 
@@ -41,43 +34,17 @@ def read_fasta(text):
     return sequences
 
 
-text = '''
->Sequence_1
-AGCTGCATCGATCGACGATCGATGACTAGCTGATCGATCGATCGATCGATCGAGCTACGATCGATGTACGATCGATCGATCGATCGACTGACTAGCTAGCTAGCATCGATCGATCGATCGATCGATCGATCGATCGATCGATCGATCGATCGACGATCGATCGATCGATCGATCGATCGACTAGC
->Sequence_2
-TTGTCAGTCGACTGCAATCACGACTCCGATCGATCGATCGATCGATGCTAGCTGATCGATCGATCGATCACGTACGACTAGACTAGCTACGACTAGT
-ATACGATCGACATATCGTACGATCGCATGCTAGCTACGTAGCATCGTACCGATGCTAGCTAGCTACGTCAGT
->Sequence_3
-AATCGCAGTAGCTGATCACATCGACTGATCTAGCATCGTAGCTACTACGATCTGATCGATCGATCGTGATCGATCGATCG
->Sequence_4
-TACGATCATTTCGGCTATTCCGCTATACGTACGATCGCCCCCCCCCCCATCGACTGACTACGACTAGCTGAC
-ACAGCTACTACGATTATACGATTCGTAGCTACGTACGATCGATCGATCGATGCTAGCTAGAC
-TACTAGCTACGATCGATCGATCGATCGATCGATCAGCTACGATCGATCGATCGATCGATCAG
-'''
-# read_fasta(text)
-
 
 def get_nucleotides(seq):
     a = seq.count('A')
     t = seq.count('T')
     c = seq.count('C')
     g = seq.count('G')    
+    total = a+t+c+g
 
-    data = {0:['A', a], 1:['T', t], 2:['C',c], 3:['G', g]}
-    df = pd.DataFrame.from_dict(data, orient='index', columns=['Base', 'Count'])
+    data = {0:['A', a, (a/total)*100], 1:['T', t, (t/total)*100], 2:['C',c, (c/total)*100], 3:['G', g, (g/total)*100]}
+    df = pd.DataFrame.from_dict(data, orient='index', columns=['Base', 'Count', 'Percent'])
     return df
-
-
-seq='TACGATCATTTCGGCTATTCCGCTATACGTACGATCGCCCCCCCCCCCATCGACTGACTACGACTAGCTGACACAGCTACTACGATTATACGATTCGTAGCTACGTACGATCGATCGATCGATGCTAGCTAGACTACTAGCTACGATCGATCGATCGATCGATCGATCAGCTACGATCGATCGATCGATCGATCAG'
-
-# print(get_nucleotides(seq), len(seq))
-
-
-
-
-# Function to handle based on if it is a fasta or csv file
-
-
 
 
 

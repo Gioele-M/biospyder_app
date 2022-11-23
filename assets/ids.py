@@ -4,6 +4,7 @@ DROPDOWN_OUTPUT = 'dropdownOutput'
 
 OUTPUT_DATA = 'outputData'
 
+N_SEQUENCES = 'nSequences'
 
 GC_DIV = 'GCDiv'
 

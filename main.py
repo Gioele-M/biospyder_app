@@ -47,18 +47,21 @@ app.layout = html.Div([
     ),
 
     html.Div(children=[
+        html.Div('Upload a fasta file to start', id=ids.N_SEQUENCES),
+
         html.Div(id=ids.OUTPUT_DATA),
 
         #Div for dropdown menu result
         html.Div(id=ids.DROPDOWN_OUTPUT),
-
-        #Div for highest GC content
-        html.Div(id=ids.GC_DIV),
-
+        
         #Div for bar chart
-        html.Div(id=ids.BAR_CHART_DIV)
+        html.Div(id=ids.BAR_CHART_DIV),
+        
+        #Div for highest GC content
+        html.Div(id=ids.GC_DIV)
     ],
     style={
+        'textAlign': 'center',
         'margin': '10px',
         'maxWidth': '60%',
         'marginLeft': 'auto',
@@ -74,6 +77,7 @@ app.layout = html.Div([
 #Callback for upload
 @app.callback(
         Output(ids.OUTPUT_DATA, 'children'),
+        Output(ids.N_SEQUENCES, 'children'),
         Input(ids.UPLOAD_FASTA_COMPONENT, 'contents')
     )
 def update_output(list_of_contents):
@@ -89,7 +93,7 @@ def update_output(list_of_contents):
             options=[{'label':m, 'value':m} for m in d], 
             id=ids.DROPDOWN_COMPONENT,
             value=list(d.keys())[0]
-            )
+            ), f'{len(d)} sequences loaded'
 
 
 #Callback for dropdown
@@ -103,13 +107,13 @@ def update_dropdown(value):
     print(type(str(value)), str(value))
     if str(value) != 'None':
         #First for lenght, second for sequence, third bar graph
-        length_text =f'You have selected {value}, of lenght {len(sequences[value])}'
+        length_text =f'You have selected {value}, of lenght {len(sequences[value])}bp'
         #Sequence
         gc_content, n = functions.gc_subsequence(sequences[value])
         gc_content_text = f'The sequence with the highest content of CG is: {gc_content}, with a total content of {n}0%'
         #Bar Graph
         df = functions.get_nucleotides(sequences[value])
-        fig = px.bar(df, x='Base', y='Count')
+        fig = px.bar(df, x='Base', y='Percent', text='Count')
         bar_graph = html.Div(dcc.Graph(figure=fig, id=ids.BAR_CHART))
         return length_text, gc_content_text, bar_graph
     
